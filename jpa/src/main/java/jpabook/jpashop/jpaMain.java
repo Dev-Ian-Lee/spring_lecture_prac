@@ -1,4 +1,6 @@
-package hellojpa;
+package jpabook.jpashop;
+
+import jpabook.jpashop.domain.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,16 +15,18 @@ public class jpaMain {
         EntityTransaction tx = em.getTransaction();
         tx.begin();
 
-        Member member = new Member();
+        try {
 
-        // DB에 저장
-        member.setId(1L);
-        member.setName("memberA");
-        em.persist(member);
+            // 문제 없으면, commit(DB에 저장)
+            tx.commit();
+        } catch (Exception e) {
+            // 문제 있으면, rollback
+            tx.rollback();
+        } finally {
+            // em 반드시 닫아주기
+            em.close();
+        }
 
-        tx.commit();
-
-        em.close();
         emf.close();
     }
 }
