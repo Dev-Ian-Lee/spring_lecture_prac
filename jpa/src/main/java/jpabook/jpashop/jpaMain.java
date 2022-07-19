@@ -9,6 +9,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 public class jpaMain {
     public static void main(String[] args) {
@@ -20,10 +24,23 @@ public class jpaMain {
 
         try {
 
-            Book book = new Book();
-            book.setName("JPA");
-            book.setAuthor("김영한");
-            em.persist(book);
+            // JPQL 쿼리
+//            List<Member> resultList = em.createQuery(
+//                    "select m from Member m where m.username like %kim%",
+//                    Member.class
+//            ).getResultList();
+
+            // Criteria 사용 준비
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Member> query = cb.createQuery(Member.class);
+
+            // 루트 클래스(조회 시작할 클래스)
+            Root<Member> m = query.from(Member.class);
+
+            // Criteria 쿼리 생성
+            CriteriaQuery<Member> cq = query.select(m).where(cb.equal(m.get("username"), "kim"));
+            List<Member> resultList = em.createQuery(cq).getResultList();
+
 
             tx.commit();
         } catch (Exception e) {
