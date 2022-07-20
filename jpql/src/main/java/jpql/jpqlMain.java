@@ -24,13 +24,28 @@ public class jpqlMain {
             member.setAge(10);
             em.persist(member);
 
-            Member result = em.createQuery(
-                            "select m from Member m where m.userName =:username",
-                            Member.class)
-                    .setParameter("username", "memberA")
-                    .getSingleResult();
+            // setParameter
+//            Member result = em.createQuery(
+//                            "SELECT m FROM Member m WHERE m.userName =:username",
+//                            Member.class)
+//                    .setParameter("username", "memberA")
+//                    .getSingleResult();
+//
+//            System.out.println("result.getUserName() = " + result.getUserName());
+//
+//            // dto 사용해 스칼라 프로젝션
+//            List<MemberDTO> resultList = em.createQuery("SELECT new jpql.MemberDTO(m.username, m.age) FROM Member m", MemberDTO.class)
+//                    .getResultList();
+//
+//            MemberDTO memberDTO = resultList.get(0);
+//            System.out.println("memberDTO.getUserName() = " + memberDTO.getUserName());
+//            System.out.println("memberDTO.getAge() = " + memberDTO.getAge());
 
-            System.out.println("result.getUserName() = " + result.getUserName());
+            // 페이징
+            List<Member> resultList = em.createQuery("SELECT m FROM Member m ORDER BY m.age DESC", Member.class)
+                    .setFirstResult(1)
+                    .setMaxResults(10)
+                    .getResultList();
 
             tx.commit();
         } catch (Exception e) {
