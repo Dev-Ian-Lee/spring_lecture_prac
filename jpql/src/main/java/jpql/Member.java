@@ -3,6 +3,9 @@ package jpql;
 import javax.persistence.*;
 
 @Entity
+@NamedQuery(
+        name = "Member.findByUserName",
+        query = "SELECT m FROM Member m WHERE m.userName = :userName")
 public class Member {
 
     @Id @GeneratedValue
@@ -10,9 +13,18 @@ public class Member {
     private String userName;
     private int age;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEAM_ID")
     private Team team;
+
+    @Enumerated(value = EnumType.STRING)
+    private MemberType type;
+
+    // 연관관계 편의 메소드
+    public void changeTeam(Team team) {
+        this.team = team;
+        team.getMembers().add(this);
+    }
 
     public Long getId() {
         return id;
@@ -36,5 +48,21 @@ public class Member {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public MemberType getType() {
+        return type;
+    }
+
+    public void setType(MemberType type) {
+        this.type = type;
     }
 }
