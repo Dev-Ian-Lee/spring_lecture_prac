@@ -5,9 +5,10 @@ import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,8 +25,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderSimpleApiController {
     private final OrderRepository orderRepository;
+    private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
-    // 엔티티 직접 노출
+    // V1 : 엔티티 직접 노출
     @GetMapping("/api/v1/simple-orders")
     public List<Order> odersV1() {
         List<Order> orders = orderRepository.findAllByCriteria(new OrderSearch());
@@ -38,7 +40,7 @@ public class OrderSimpleApiController {
         return orders;
     }
 
-    // 엔티티 DTO로 변환
+    // V2 : 엔티티 DTO로 변환
     @GetMapping("/api/v2/simple-orders")
     public List<SimpleOrderDto> ordersV2() {
         List<Order> orders = orderRepository.findAllByCriteria(new OrderSearch());
@@ -56,6 +58,12 @@ public class OrderSimpleApiController {
         return orders.stream()
                 .map(o -> new SimpleOrderDto(o))
                 .collect(Collectors.toList());
+    }
+
+    // 엔티티 사용하지 않고 JPA에서 바로 DTO 사용
+    @GetMapping("/api/v4/simple-orders")
+    public List<OrderSimpleQueryDto> ordersV4() {
+        return orderSimpleQueryRepository.findOrderDtos();
     }
 
     @Data
