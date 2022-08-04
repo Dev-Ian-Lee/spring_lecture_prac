@@ -50,7 +50,7 @@ public class OrderSimpleApiController {
                 .collect(Collectors.toList());
     }
 
-    // 엔티티 DTO로 변환 + 페치 조인
+    // V3 : 엔티티 DTO로 변환 + 페치 조인
     @GetMapping("/api/v3/simple-orders")
     public List<SimpleOrderDto> ordersV3() {
         List<Order> orders = orderRepository.findAllWithMemberDelivery();
