@@ -10,6 +10,7 @@ import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -52,15 +53,17 @@ public class OrderSimpleApiController {
 
     // V3 : 엔티티 DTO로 변환 + 페치 조인
     @GetMapping("/api/v3/simple-orders")
-    public List<SimpleOrderDto> ordersV3() {
-        List<Order> orders = orderRepository.findAllWithMemberDelivery();
+    public List<SimpleOrderDto> ordersV3(
+            @RequestParam(value="offset", defaultValue = "0") int offset,
+            @RequestParam(value="limit", defaultValue = "100") int limit) {
+        List<Order> orders = orderRepository.findAllWithMemberDelivery(offset, limit);
 
         return orders.stream()
                 .map(o -> new SimpleOrderDto(o))
                 .collect(Collectors.toList());
     }
 
-    // 엔티티 사용하지 않고 JPA에서 바로 DTO 사용
+    // V4 : 엔티티 사용하지 않고 JPA에서 바로 DTO 사용
     @GetMapping("/api/v4/simple-orders")
     public List<OrderSimpleQueryDto> ordersV4() {
         return orderSimpleQueryRepository.findOrderDtos();
