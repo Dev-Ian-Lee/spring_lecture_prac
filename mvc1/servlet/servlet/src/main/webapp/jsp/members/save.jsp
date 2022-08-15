@@ -5,9 +5,9 @@
 // request, response 사용 가능
  MemberRepository memberRepository = MemberRepository.getInstance();
  System.out.println("save.jsp");
- String username = request.getParameter("username");
+ String userName = request.getParameter("userName");
  int age = Integer.parseInt(request.getParameter("age"));
- Member member = new Member(username, age);
+ Member member = new Member(userName, age);
  System.out.println("member = " + member);
  memberRepository.save(member);
 %>
@@ -19,7 +19,7 @@
 성공
 <ul>
  <li>id=<%=member.getId()%></li>
- <li>username=<%=member.getUsername()%></li>
+ <li>userName=<%=member.getUserName()%></li>
  <li>age=<%=member.getAge()%></li>
 </ul>
 <a href="/index.html">메인</a>

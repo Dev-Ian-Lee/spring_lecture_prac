@@ -10,7 +10,7 @@
 <table>
  <thead>
  <th>id</th>
- <th>username</th>
+ <th>userName</th>
  <th>age</th>
  </thead>
  <tbody>
