@@ -27,7 +27,7 @@ public class BasicItemController {
 
     // 테스트 데이터 추가
     @PostConstruct
-    public void itit() {
+    public void init() {
         itemRepository.save(new Item("itemA", 10000, 10));
         itemRepository.save(new Item("itemB", 20000, 20));
     }
